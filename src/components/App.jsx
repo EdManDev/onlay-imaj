@@ -1,17 +1,26 @@
 import React from "react";
 import DropAndCrop from "./DropAndCrop";
+import {
+	VscCloudUpload,
+	VscChromeClose,
+	VscCloudDownload,
+} from "react-icons/vsc";
 
 const App = () => {
 	return (
 		<div>
 			<div className="App">
 				<div className="text-center">
-					<h1>Playground for Bootstrap File Input by Krajee</h1>
+					<h1>Playground for Image Upload n Crop it By Edman</h1>
 					<p>
-						This Pen uses Bootstrap 3.3.7 (but Bs 4.x is supported as well) and
-						Font-Awesome 5 icons. <br />
-						<b>Note: </b> In the samples of <code>Bootstrap File Input</code>{" "}
-						not all work FA icons worked (hence the next line ^^)
+						<br />
+						<b>Note: </b> after pressing the upload button <VscCloudUpload />
+						{"  "}
+						or simply drag an image for uploading an image{" "}
+						<code>drag the cursor hover the image </code> to select the desired
+						space area in the canvas you want to keep ( download the croped
+						image you've selected ^^) then download the image by pressing the
+						download button <VscCloudDownload />
 					</p>
 				</div>
 

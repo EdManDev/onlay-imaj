@@ -1,0 +1,19 @@
+.form-control {
+	margin: 0 !important;
+	padding: 0 !important;
+	outline: none !important;
+	/* background: #ddd; */
+	color: #6c757d !important;
+	overflow: hidden;
+}
+
+.btn-upload-image {
+	background: #ced4da;
+	border: 1px solid #ced4da;
+	overflow-y: hidden;
+	border-radius: 0;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}

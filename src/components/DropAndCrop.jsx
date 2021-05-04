@@ -1,4 +1,5 @@
 import React, { useState, createRef } from "react";
+import "./DropAndCrop.css";
 import {
 	VscCloudUpload,
 	VscChromeClose,
@@ -130,18 +131,19 @@ const DropAndCrop = () => {
 
 	return (
 		<div className="col-sm">
-			<div className="card p-2">
+			<div className="">
 				<div>
 					<section className="input-group mb-3">
 						<Dropzone
 							onDrop={handleOnDrop}
 							accept={acceptedFileTypesArray}
 							multiple={false}
+							className=""
 						>
 							{({ getRootProps, getInputProps }) => (
 								<div
 									{...getRootProps({
-										className: "",
+										className: "form-control ",
 										onDrop: (event, file) => {
 											handleOnDrop(event.dataTransfer.files, null, event);
 											event.stopPropagation();
@@ -149,11 +151,15 @@ const DropAndCrop = () => {
 										},
 									})}
 								>
-									{/* <p className="">Drag and drop image here</p> */}
-									<button type="button" className="btn btn-outline-primary">
+									<button
+										type="button"
+										className="btn btn-outline-secondary btn-upload-image"
+									>
 										<VscCloudUpload /> Click to select image
-									</button>
-
+									</button>{" "}
+									<span className="cursor-pointer">
+										or Drag and drop image here
+									</span>
 									<input
 										type="file"
 										className="form-control"
@@ -162,7 +168,7 @@ const DropAndCrop = () => {
 								</div>
 							)}
 						</Dropzone>
-						<input type="file" className="form-control" />
+						{/* <input type="file" className="form-control" /> */}
 
 						<button
 							className="btn btn-outline-danger"
@@ -172,53 +178,17 @@ const DropAndCrop = () => {
 							<VscChromeClose /> Clear
 						</button>
 					</section>
-
-					<br />
-					<br />
-					<br />
-					<hr />
-
-					<Dropzone
-						onDrop={handleOnDrop}
-						accept={acceptedFileTypesArray}
-						multiple={false}
+				</div>
+				{msg ? (
+					<div
+						className={`w-40 text-center bg-${msg.color}-500 bg-opacity-50 border-2 border-${msg.color}-600 p-2 mx-auto my-2`}
 					>
-						{({ getRootProps, getInputProps }) => (
-							<div
-								{...getRootProps({
-									className: "",
-									onDrop: (event, file) => {
-										handleOnDrop(event.dataTransfer.files, null, event);
-										event.stopPropagation();
-										event.preventDefault();
-									},
-								})}
-							>
-								<input className="form-control" {...getInputProps()} />
-								<p className="">Drag and drop image here</p>
-								<button type="button" class="btn btn-primary">
-									<VscCloudUpload /> Click to select image
-								</button>
-							</div>
-						)}
-					</Dropzone>
-					<div className="mt-2">
-						<button onClick={handleClear} type="button" class="btn btn-danger">
-							<VscChromeClose /> Clear
-						</button>
+						{msg.text}
 					</div>
-				</div>
+				) : (
+					""
+				)}
 			</div>
-
-			{msg ? (
-				<div
-					className={`w-40 text-center bg-${msg.color}-500 bg-opacity-50 border-2 border-${msg.color}-600 p-2 mx-auto my-2`}
-				>
-					{msg.text}
-				</div>
-			) : (
-				""
-			)}
 
 			<div className="col-sm">
 				{imgSrc !== null ? (
@@ -234,7 +204,7 @@ const DropAndCrop = () => {
 							/>
 						</div>
 						<div>
-							<canvas className="mx-auto mt-4 md:mt-0" ref={canvasRef}></canvas>
+							<canvas className="" ref={canvasRef}></canvas>
 							<button
 								onClick={handleDownload}
 								type="button"
@@ -246,7 +216,13 @@ const DropAndCrop = () => {
 						</div>
 					</>
 				) : (
-					"..."
+					<div className="card">
+						<div className="card-body">
+							<strong>
+								your Preview Image will Show here below of the uploaded Image
+							</strong>
+						</div>
+					</div>
 				)}
 			</div>
 		</div>
