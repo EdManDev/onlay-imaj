@@ -1,28 +1,28 @@
 import React from "react";
 import DropAndCrop from "./DropAndCrop";
-import {
-	VscCloudUpload,
-	VscChromeClose,
-	VscCloudDownload,
-} from "react-icons/vsc";
+import { VscCloudUpload, VscCloudDownload } from "react-icons/vsc";
+import TopNav from "./TopNav";
 
 const App = () => {
 	return (
 		<div>
 			<div className="App">
-				<div className="text-center">
-					<h1>Playground for Image Upload n Crop it By Edman</h1>
-					<p>
-						<br />
-						<b>Note: </b> after pressing the upload button <VscCloudUpload />
-						{"  "}
-						or simply drag an image for uploading an image{" "}
-						<code>drag the cursor hover the image </code> to select the desired
-						space area in the canvas you want to keep ( download the croped
-						image you've selected ^^) then download the image by pressing the
-						download button <VscCloudDownload />
-					</p>
-				</div>
+				<TopNav />
+				<section className="container">
+					<div className="text-center">
+						<h1>Online Image Crop By EdMan</h1>
+						<p>
+							<br />
+							<b>Note: </b> after pressing the upload button <VscCloudUpload />
+							{"  "}
+							or simply drag an image for uploading an image{" "}
+							<code>drag the cursor hover the image </code> to select the
+							desired space area in the canvas you want to keep ( download the
+							croped image you've selected ^^) then download the image by
+							pressing the download button <VscCloudDownload />
+						</p>
+					</div>
+				</section>
 
 				<section className="m-3">
 					<div className="">
