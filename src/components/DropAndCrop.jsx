@@ -1,5 +1,4 @@
 import React, { useState, createRef } from "react";
-import "./DropAndCrop.css";
 import {
 	VscCloudUpload,
 	VscChromeClose,

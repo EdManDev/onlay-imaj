@@ -10,7 +10,7 @@ const App = () => {
 				<TopNav />
 				<section className="container">
 					<div className="text-center">
-						<h1>Online Image Crop By EdMan</h1>
+						<h1>Online Koupe Image</h1>
 						<p>
 							<br />
 							<b>Note: </b> after pressing the upload button <VscCloudUpload />
@@ -29,7 +29,7 @@ const App = () => {
 						<div className="card mt-3">
 							<div className="card-header">
 								<div className="text-center">
-									<h3>Drop n Crop</h3>
+									<h4>Online Koupe Image</h4>
 								</div>
 							</div>
 							<div className="card-body">
