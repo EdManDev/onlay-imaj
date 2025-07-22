@@ -29,10 +29,10 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, onDragOver, onDro
       style={{
         position: 'relative',
         width: '100%',
-        height: '320px',
-        border: isDragActive 
-          ? '2px dashed var(--primary-400)' 
-          : imageUrl 
+        height: '100%',
+        border: isDragActive
+          ? '2px dashed var(--primary-400)'
+          : imageUrl
             ? '2px solid var(--gray-200)'
             : '2px dashed var(--gray-300)',
         background: isDragActive
@@ -62,8 +62,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, onDragOver, onDro
           zIndex: 10
         }}>
           <div className="text-center">
-            <div className="card animate-pulse" style={{ 
-              width: '64px', 
+            <div className="card animate-pulse" style={{
+              width: '64px',
               height: '64px',
               background: 'var(--primary-500)',
               margin: '0 auto var(--space-lg)',
@@ -83,9 +83,9 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, onDragOver, onDro
       )}
 
       {imageUrl ? (
-        <div style={{ 
-          position: 'relative', 
-          width: '100%', 
+        <div style={{
+          position: 'relative',
+          width: '100%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
@@ -106,11 +106,11 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, onDragOver, onDro
             top: 'var(--space-md)',
             right: 'var(--space-md)'
           }}>
-            <div style={{ 
-              width: '6px', 
-              height: '6px', 
-              backgroundColor: 'var(--success-500)', 
-              borderRadius: '50%' 
+            <div style={{
+              width: '6px',
+              height: '6px',
+              backgroundColor: 'var(--success-500)',
+              borderRadius: '50%'
             }}></div>
             Image loaded
           </div>
@@ -118,8 +118,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, onDragOver, onDro
       ) : (
         <div className="text-center" style={{ padding: 'var(--space-xl)' }}>
           {/* Upload Icon */}
-          <div className="card" style={{ 
-            width: '80px', 
+          <div className="card" style={{
+            width: '80px',
             height: '80px',
             background: 'var(--gradient-primary)',
             margin: '0 auto var(--space-xl)',
@@ -134,15 +134,15 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, onDragOver, onDro
           </div>
 
           <h3 className="heading-3">Upload Your Image</h3>
-          
+
           <div style={{ marginBottom: 'var(--space-lg)' }}>
-            <div className="flex items-center justify-center gap-sm" style={{ 
+            <div className="flex items-center justify-center gap-sm" style={{
               marginBottom: 'var(--space-sm)',
               flexWrap: 'wrap'
             }}>
-              <div className="status-indicator" style={{ 
-                background: 'var(--gray-100)', 
-                color: 'var(--gray-600)' 
+              <div className="status-indicator" style={{
+                background: 'var(--gray-100)',
+                color: 'var(--gray-600)'
               }}>
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -158,8 +158,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, onDragOver, onDro
           {/* Supported formats */}
           <div className="flex items-center justify-center gap-sm" style={{ flexWrap: 'wrap' }}>
             {['JPG', 'PNG', 'WEBP', 'GIF'].map((format) => (
-              <span key={format} className="status-indicator" style={{ 
-                background: 'var(--gray-50)', 
+              <span key={format} className="status-indicator" style={{
+                background: 'var(--gray-50)',
                 color: 'var(--gray-500)',
                 border: '1px solid var(--gray-200)'
               }}>

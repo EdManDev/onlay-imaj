@@ -1,6 +1,6 @@
 import React, { useState, createRef } from "react";
 import Dropzone from "react-dropzone";
-import ReactCrop from "react-image-crop";
+import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import {
 	getFileExtensionOfBase64,
@@ -25,13 +25,7 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 	const [msg, setMsg] = useState<{ text: string; color: string } | null>(null);
 	const [imgSrc, setImgSrc] = useState<string | null>(null);
 	const [imgRef, setImgRef] = useState<{ scaleX?: number; scaleY?: number }>({});
-	const [crop, setCrop] = useState({
-		unit: "px" as const,
-		x: 0,
-		y: 0,
-		width: 0,
-		height: 0,
-	});
+	const [crop, setCrop] = useState<Crop>();
 	const [canvasRef] = useState(createRef<HTMLCanvasElement>());
 
 	// Verify file for image files
@@ -77,22 +71,39 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 		}
 	};
 
-	const handleImageLoaded = (image: HTMLImageElement) => {
+	const handleImageLoaded = (e: React.SyntheticEvent<HTMLImageElement>) => {
+		const image = e.currentTarget;
+		const { naturalWidth: width, naturalHeight: height } = image;
+		
 		setImgRef({
-			scaleX: image.naturalWidth / image.width,
-			scaleY: image.naturalHeight / image.height,
+			scaleX: width / image.width,
+			scaleY: height / image.height,
 		});
+
+		// Set initial crop - center crop with 50% width
+		const initialCrop = centerCrop(
+			makeAspectCrop(
+				{ unit: '%', width: 50 },
+				1, // Free aspect ratio
+				width,
+				height
+			),
+			width,
+			height
+		);
+
+		setCrop(initialCrop);
 	};
 
-	const handleOnCropChange = (cropped: any) => {
-		setCrop(cropped);
+	const handleOnCropChange = (crop: Crop) => {
+		setCrop(crop);
 	};
 
-	const handleOnCropComplete = (cropped: any, percentCrop: any) => {
+	const handleOnCropComplete = (crop: Crop) => {
 		const canvasCurrentRef = canvasRef.current;
 		const img64Src = imgSrc;
-		if (canvasCurrentRef && img64Src) {
-			image64ToCanvasRef(canvasCurrentRef, img64Src, cropped, imgRef);
+		if (canvasCurrentRef && img64Src && crop.width && crop.height) {
+			image64ToCanvasRef(canvasCurrentRef, img64Src, crop, imgRef);
 		}
 	};
 
@@ -119,7 +130,7 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 			if (ctx !== null) ctx.clearRect(0, 0, canvas.width, canvas.height);
 			setImgSrc(null);
 			setImgRef({});
-			setCrop({ unit: "px", x: 0, y: 0, width: 0, height: 0 });
+			setCrop(undefined);
 			setMsg(null);
 		} else {
 			setMsg({
@@ -230,12 +241,17 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 						<h3 className="heading-3">Crop Image</h3>
 						<div style={{ marginBottom: 'var(--space-lg)' }}>
 							<ReactCrop
-								src={imgSrc}
 								crop={crop}
-								onImageLoaded={handleImageLoaded}
 								onChange={handleOnCropChange}
 								onComplete={handleOnCropComplete}
-							/>
+							>
+								<img 
+									src={imgSrc} 
+									onLoad={handleImageLoaded}
+									alt="Crop target"
+									style={{ maxWidth: '100%', height: 'auto' }}
+								/>
+							</ReactCrop>
 						</div>
 					</div>
 
