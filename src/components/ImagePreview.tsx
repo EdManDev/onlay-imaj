@@ -133,7 +133,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ imageUrl, onDragOver, onDro
             </svg>
           </div>
 
-          <h3 className="heading-3">Upload Your Image</h3>
+          <h3 className="heading-3" style={{ color: '#000000' }}>Upload Your Image</h3>
 
           <div style={{ marginBottom: 'var(--space-lg)' }}>
             <div className="flex items-center justify-center gap-sm" style={{

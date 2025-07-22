@@ -1,5 +1,5 @@
 import React, { useState, createRef } from "react";
-import Dropzone from "react-dropzone";
+import Dropzone, { type FileRejection } from "react-dropzone";
 import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import {
@@ -48,8 +48,7 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 		return true;
 	};
 
-	const handleOnDrop = (files: File[], rejFiles: any, e: any) => {
-		handleClear(e);
+	const handleOnDrop = (files: File[], rejFiles: FileRejection[]) => {
 		if (rejFiles && rejFiles.length > 0) {
 			setMsg({
 				text: "Please insert a valid image file",
@@ -74,7 +73,7 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 	const handleImageLoaded = (e: React.SyntheticEvent<HTMLImageElement>) => {
 		const image = e.currentTarget;
 		const { naturalWidth: width, naturalHeight: height } = image;
-		
+
 		setImgRef({
 			scaleX: width / image.width,
 			scaleY: height / image.height,
@@ -93,10 +92,28 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 		);
 
 		setCrop(initialCrop);
+
+		// Initial preview render
+		setTimeout(() => {
+			if (canvasRef.current && imgSrc) {
+				image64ToCanvasRef(canvasRef.current, imgSrc, initialCrop, {
+					scaleX: width / image.width,
+					scaleY: height / image.height,
+				});
+			}
+		}, 100);
 	};
 
 	const handleOnCropChange = (crop: Crop) => {
 		setCrop(crop);
+		// Update preview in real-time
+		if (crop.width && crop.height) {
+			const canvasCurrentRef = canvasRef.current;
+			const img64Src = imgSrc;
+			if (canvasCurrentRef && img64Src) {
+				image64ToCanvasRef(canvasCurrentRef, img64Src, crop, imgRef);
+			}
+		}
 	};
 
 	const handleOnCropComplete = (crop: Crop) => {
@@ -145,8 +162,8 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div className="flex items-center gap-md">
-					<div className="card flex items-center justify-center" style={{ 
-						width: '40px', 
+					<div className="card flex items-center justify-center" style={{
+						width: '40px',
 						height: '40px',
 						background: 'var(--secondary-50)',
 						border: '1px solid var(--secondary-200)'
@@ -156,8 +173,8 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 						</svg>
 					</div>
 					<div>
-						<h2 className="heading-2" style={{ marginBottom: '0' }}>Image Crop & Download</h2>
-						<p className="text-sm" style={{ color: 'var(--gray-500)', margin: '0' }}>Upload, crop, and download images</p>
+						<h2 className="heading-2" style={{ marginBottom: '0', color: '#000000' }}>Image Crop & Download</h2>
+						<p className="text-sm" style={{ color: '#000000', margin: '0' }}>Upload, crop, and download images</p>
 					</div>
 				</div>
 				<button onClick={onBack} className="btn btn-secondary">
@@ -170,7 +187,7 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 
 			{/* Message */}
 			{msg && (
-				<div className={`card animate-slide-in status-indicator status-${msg.color}`} style={{ 
+				<div className={`card animate-slide-in status-indicator status-${msg.color}`} style={{
 					padding: 'var(--space-md)',
 					justifyContent: 'center'
 				}}>
@@ -192,8 +209,8 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 							{...getRootProps()}
 							className="card"
 							style={{
-								border: isDragActive 
-									? '2px dashed var(--primary-400)' 
+								border: isDragActive
+									? '2px dashed var(--primary-400)'
 									: '2px dashed var(--gray-300)',
 								background: isDragActive
 									? 'var(--primary-50)'
@@ -238,15 +255,15 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 				<div className="grid grid-2">
 					{/* Crop Section */}
 					<div className="card card-padding">
-						<h3 className="heading-3">Crop Image</h3>
+						<h3 className="heading-3" style={{ color: '#000000' }}>Crop Image</h3>
 						<div style={{ marginBottom: 'var(--space-lg)' }}>
 							<ReactCrop
 								crop={crop}
 								onChange={handleOnCropChange}
 								onComplete={handleOnCropComplete}
 							>
-								<img 
-									src={imgSrc} 
+								<img
+									src={imgSrc}
 									onLoad={handleImageLoaded}
 									alt="Crop target"
 									style={{ maxWidth: '100%', height: 'auto' }}
@@ -258,7 +275,7 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 					{/* Preview Section */}
 					<div className="card card-padding">
 						<div className="flex items-center justify-between" style={{ marginBottom: 'var(--space-lg)' }}>
-							<h3 className="heading-3">Preview</h3>
+							<h3 className="heading-3" style={{ color: '#000000' }}>Preview</h3>
 							<button onClick={handleDownload} className="btn btn-primary">
 								<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
 									<path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -266,18 +283,18 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 								Download
 							</button>
 						</div>
-						<div className="card" style={{ 
-							background: 'var(--gray-50)', 
+						<div className="card" style={{
+							background: 'var(--gray-50)',
 							padding: 'var(--space-md)',
 							minHeight: '200px',
 							display: 'flex',
 							alignItems: 'center',
 							justifyContent: 'center'
 						}}>
-							<canvas 
-								ref={canvasRef} 
-								style={{ 
-									maxWidth: '100%', 
+							<canvas
+								ref={canvasRef}
+								style={{
+									maxWidth: '100%',
 									maxHeight: '300px',
 									borderRadius: 'var(--radius-md)'
 								}}
@@ -291,7 +308,7 @@ const DropAndCrop: React.FC<DropAndCropProps> = ({ onBack }) => {
 						<svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" style={{ margin: '0 auto var(--space-md)' }}>
 							<path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
 						</svg>
-						<h3 className="heading-3">No Image Selected</h3>
+						<h3 className="heading-3" style={{ color: '#000000' }}>No Image Selected</h3>
 						<p className="text-sm">Upload an image above to start cropping</p>
 					</div>
 				</div>

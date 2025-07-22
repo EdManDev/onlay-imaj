@@ -21,10 +21,10 @@ export const getFileExtensionOfBase64 = (base64String: string): string => {
 export const image64ToCanvasRef = (
   canvasRef: HTMLCanvasElement,
   image64: string,
-  crop: any,
-  imgRef: any
+  crop: { unit: string; x: number; y: number; width: number; height: number },
+  imgRef: { scaleX?: number; scaleY?: number }
 ): void => {
-  if (!canvasRef || !image64 || !crop) return;
+  if (!canvasRef || !image64 || !crop || !crop.width || !crop.height) return;
 
   const canvas = canvasRef;
   const ctx = canvas.getContext('2d');
@@ -32,22 +32,44 @@ export const image64ToCanvasRef = (
 
   const image = new Image();
   image.onload = () => {
-    const scaleX = imgRef.scaleX || 1;
-    const scaleY = imgRef.scaleY || 1;
+    const { naturalWidth, naturalHeight } = image;
+    
+    // Handle both pixel and percentage crops
+    let cropX, cropY, cropWidth, cropHeight;
+    
+    if (crop.unit === '%') {
+      // Convert percentage to pixels
+      cropX = (crop.x / 100) * naturalWidth;
+      cropY = (crop.y / 100) * naturalHeight;
+      cropWidth = (crop.width / 100) * naturalWidth;
+      cropHeight = (crop.height / 100) * naturalHeight;
+    } else {
+      // Use scaling factors for pixel crops
+      const scaleX = imgRef.scaleX || 1;
+      const scaleY = imgRef.scaleY || 1;
+      
+      cropX = crop.x * scaleX;
+      cropY = crop.y * scaleY;
+      cropWidth = crop.width * scaleX;
+      cropHeight = crop.height * scaleY;
+    }
 
-    canvas.width = crop.width;
-    canvas.height = crop.height;
+    // Set canvas size to crop dimensions
+    canvas.width = cropWidth;
+    canvas.height = cropHeight;
 
+    // Clear canvas and draw the cropped region
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(
       image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
+      cropX,
+      cropY,
+      cropWidth,
+      cropHeight,
       0,
       0,
-      crop.width,
-      crop.height
+      cropWidth,
+      cropHeight
     );
   };
   image.src = image64;

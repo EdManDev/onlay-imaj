@@ -55,11 +55,18 @@ const OCRComponent: React.FC<OCRComponentProps> = ({ imageFile, language }) => {
     }
   };
 
+  const clearResults = () => {
+    setOcrText('');
+    setError('');
+    setCopied(false);
+    setProgress(0);
+  };
+
   React.useEffect(() => {
     if (imageFile) {
       performOCR();
     }
-  }, [imageFile]);
+  }, [imageFile, language]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
@@ -76,8 +83,8 @@ const OCRComponent: React.FC<OCRComponentProps> = ({ imageFile, language }) => {
           </svg>
         </div>
         <div>
-          <h2 className="heading-2" style={{ marginBottom: '0' }}>Text Extraction</h2>
-          <p className="text-sm" style={{ color: 'var(--gray-500)', margin: '0' }}>AI-powered OCR results</p>
+          <h2 className="heading-2" style={{ marginBottom: '0', color: '#000000' }}>Text Extraction</h2>
+          <p className="text-sm" style={{ color: '#000000', margin: '0' }}>AI-powered OCR results</p>
         </div>
       </div>
 
@@ -165,26 +172,37 @@ const OCRComponent: React.FC<OCRComponentProps> = ({ imageFile, language }) => {
                 {ocrText.length} characters
               </div>
             </div>
-            <button
-              onClick={copyToClipboard}
-              className={copied ? "btn btn-success" : "btn btn-primary"}
-            >
-              {copied ? (
-                <>
-                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Copied!</span>
-                </>
-              ) : (
-                <>
-                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                  <span>Copy Text</span>
-                </>
-              )}
-            </button>
+            <div className="flex items-center gap-md">
+              <button
+                onClick={clearResults}
+                className="btn btn-secondary"
+              >
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span>Clear</span>
+              </button>
+              <button
+                onClick={copyToClipboard}
+                className={copied ? "btn btn-success" : "btn btn-primary"}
+              >
+                {copied ? (
+                  <>
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <span>Copy Text</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Text Content */}
@@ -216,7 +234,8 @@ const OCRComponent: React.FC<OCRComponentProps> = ({ imageFile, language }) => {
                 top: 'var(--space-md)',
                 right: 'var(--space-md)',
                 background: 'rgba(255, 255, 255, 0.9)',
-                border: '1px solid var(--gray-200)'
+                border: '1px solid var(--gray-200)',
+                color: '#000000'
               }}>
                 Scroll to view more
               </div>
