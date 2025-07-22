@@ -86,7 +86,6 @@ function App() {
           {/* Header */}
           <header className="text-center animate-fade-in" style={{ marginBottom: '3rem' }}>
 
-
             <h1 className="heading-1">
               Onlay-imaj
             </h1>
@@ -168,6 +167,18 @@ function App() {
             )}
           </div>
         </div>
+
+        {/* Footer */}
+        <footer className="text-center" style={{
+        }}>
+          <p style={{
+            color: 'rgba(255, 255, 255, 0.7)',
+            fontSize: 'var(--font-size-sm)',
+            marginTop: '50px'
+          }}>
+            EdManDev 2025 all Right reserved
+          </p>
+        </footer>
       </div>
     </div>
   );
